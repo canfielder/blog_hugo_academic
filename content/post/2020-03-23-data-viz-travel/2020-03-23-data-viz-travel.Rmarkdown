@@ -11,6 +11,7 @@ authors: []
 lastmod: '2020-03-23T14:39:26-04:00'
 featured: yes
 draft: false
+output: html_document
 image:
   caption: 'test'
   focal_point: 'smart'
@@ -249,9 +250,9 @@ col_pal_leaflet <- colorNumeric(palette = "viridis",
                     domain = spdf_county_visited$visited)
 ```
 
-With everything all set, I can now generate the leaflet interactive visual. We use the **widgetframe** library due to the Hugo theme of this website not allowing htmlwidgets to be projected.
+With everything all set, I can now generate the leaflet interactive visual. The settings for the Academic Hugo theme do not allow **htmlwidgets** to display as is. Therefore, I need to perform a small workaround,where I export the **leaflet** **widget** and then reimport it as an html object in an iframe.
 ```{r leaflet_plot, out.width="100%"}
-l <- leaflet(options = leafletOptions(minZoom = 3)) %>% 
+lf <- leaflet(options = leafletOptions(minZoom = 3)) %>% 
   addTiles() %>% 
   addPolygons(data = spdf_state,
     color = "#2E4053",
@@ -279,7 +280,10 @@ l <- leaflet(options = leafletOptions(minZoom = 3)) %>%
                lat1 = 73, 
                lat2 = 15)
 
-frameWidget(l)
+htmlwidgets::saveWidget(widget = lf, file = "leaflet_figure.html", selfcontained = TRUE)
 ```
 
+<iframe src="leaflet_figure.html" height = "500" width="100%"></iframe> 
+
 Admittedly, it runs a little slow, but is still pretty useful for determining what states and counties I might get on a future trip.
+
