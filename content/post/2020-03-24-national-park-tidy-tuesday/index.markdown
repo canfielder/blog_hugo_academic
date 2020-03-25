@@ -1,0 +1,272 @@
+---
+title: "America's Best Idea - Part 2 #TidyTuesday"
+author: Evan Canfield
+date: '2020-03-24'
+slug: national-park-tidy-tuesday
+categories: [data viz, TidyTuesday]
+tags: ["R", "ggplot"]
+subtitle: ''
+summary: Racing Bar Chart for America's National Parks
+authors: []
+lastmod: '2020-03-24T12:49:15-04:00'
+featured: no
+draft: false
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+**Update:**
+After getting some great feedback on twitter from the #rstats community I was able to make a few tweaks to improve the racing bar chart. I'd like to thank @CedScherer who pointed me to this great [Github repo](https://github.com/amrrs/animated_bar_charts_in_R) and @JonTheGeek who directed me to last weeks [#TidyTuesday podcast](https://www.tidytuesday.com/3)
+
+
+# Racing Bar Chart!
+For #tidytuesday we're looking at America's National Parks! I have already blogged about how much I love the [Nation Park System](https://evancanfield.netlify.com/posts/2019-08-30-america-s-best-idea-national-parks/national-park-visuals/), so this is perfect. My goal is to create a racing bar chart to see which National Park sites have been the most popular since 1904. 
+
+## Libraries
+
+```r
+if (!require(pacman)) {install.packages('pacman')} 
+p_load(
+  gganimate,
+  imputeTS, 
+  janitor,
+  skimr,
+  stringr,
+  tidyverse,
+  lubridate
+  )
+```
+
+## Import Data
+Instead of using the #TidyTuesday data set file, since I have already been exploring the National Park Visitor data, I will use the data I've already gathered. The full public data can be found [here](https://bit.ly/1kEMuRo) (make sure to select All Years, All Parks, and Summary Only? = False to get the full data set). I also have imported a color palette based on the National Park passports. The passports break the country down into color coded regions. I plan to apply the regional colors to each park in the racing bar chart. 
+
+```r
+# NPS Visitors
+nps_summary_raw <- read.csv("./data/annual_summary_report_1904-2018.csv",
+                        stringsAsFactors = FALSE)
+
+# NPS Region Color Table
+nps_region_colors <- read.csv("./data/nps_region_colors.csv",
+                              stringsAsFactors = FALSE)
+
+# Park / Region Definitions
+nps_park_region_list <- read.csv("./data/nps_parks_top_25.csv",
+                              stringsAsFactors = FALSE)
+```
+
+## Data Prep
+The only important data is the park name, the year, and the number of visitors. So the data set can be greatly pared down. The park name should be treated as a factor. Also, as a side note, I like a consistent case and labeling structure, so I use the janitor package to clean the variable names.
+
+```r
+nps_summary <- nps_summary_raw %>% 
+  clean_names() %>% 
+  select(park_name, year, recreation_visitors) %>% 
+  mutate(park_name = as.factor(park_name))
+```
+
+### Hot Springs National Park 1906-1909
+There appears to be missing data for Hot Springs National Park between 1905 and 1910. It's not clear why this is, but it is particularly noticable due to Hot Springs being the number one visited park during that period. Visitation numbers were on a differnet magnitude compared to the other parks. To smooth out the bar chart I am going to interpolate Hot Springs visitor numbers for those missing years. 
+
+```r
+# Interpolation Values
+x <- ts(c(109000,NA,NA,NA,NA,112000))
+
+y <- na.interpolation(x)
+
+# Input Interpolated Values
+nps_summary <- nps_summary%>%
+  rbind(list("Hot Springs NP", 1906, y[2])) %>%
+  rbind(list("Hot Springs NP", 1907, y[3])) %>%
+  rbind(list("Hot Springs NP", 1908, y[4])) %>%
+  rbind(list("Hot Springs NP", 1909, y[5])) %>% 
+  arrange(year)
+```
+
+### Ranking
+The racing bar chart will show the top park sites for each year. To visualize this I need to rank each park by population for each year. I will then filter the data by rank in order to only show the number of sites I decide to use.
+
+```r
+#Number of parks to show on the bar chart
+number_of_parks <- 15
+
+#Create annual rank and filter by number of parks
+nps_summary_rank <- nps_summary %>% 
+  group_by(year) %>% 
+  mutate(rank = as.integer(rank(-recreation_visitors))) %>% 
+  ungroup() %>% 
+  filter(rank <= number_of_parks) %>% 
+  left_join(nps_park_region_list, by = "park_name") %>% 
+  left_join(select(nps_region_colors, nps_region:nps_region_names),
+            by = "nps_region" ) %>% 
+  mutate(nps_region_names = as.factor(nps_region_names))
+```
+
+## Color
+In order to use the color palette in ggplot I need to develop a color map.
+
+```r
+#Assign Colors to NPS Regions
+color_map <- setNames(nps_region_colors$html_color_code_stamps,
+                      nps_region_colors$nps_region_names)
+```
+
+## Region CSV
+I created a list of every park that had ever been in th eannual top 25. I then exported to csv and manually added region data to that csv. The file was then reimported into this code above.
+
+```r
+# Generate list of top n ranked parks
+nps_summary_rank_park_list <- nps_summary_rank %>% 
+  distinct(park_name)
+
+## Export Top N list for generating a cross reference of parks and regions
+# write.csv(x = nps_summary_rank_park_list,
+#           file = "./data/nps_parks_top_n.csv", 
+#           row.names = FALSE)
+```
+
+## Racing Bar Chart
+To create a racing bar chart with R I will use gganimate. First I like to set up a function for the theme and other design parameters.
+
+```r
+# Theme Parameters
+theme_racing_bar <- function(){
+  theme_minimal() +
+    theme(
+      axis.title = element_blank(),
+      axis.text = element_blank(),
+      panel.grid = element_blank(),
+      legend.position = "bottom",
+      legend.text = element_text(size = 16),
+      legend.title = element_text(size = 20),
+      legend.spacing.y = unit(20, "cm"),
+      plot.margin = margin(2,4,2,6,"cm"),
+      plot.title = element_text(
+        hjust = 0.5, 
+        face = "bold",
+        size = 40),
+      plot.subtitle = element_text(
+      hjust = 0.5, 
+      face = "italic",
+      size = 30)
+    )
+}
+```
+
+With that established the animation can be created.
+
+```r
+# Create gganimate object
+nps_racing_bar <- 
+  ggplot(
+    data = nps_summary_rank,
+    mapping = aes(
+      x = rank,
+      y = recreation_visitors,
+      group = park_name
+         )
+    ) +
+  geom_tile(
+    mapping = aes(
+      y = recreation_visitors/2,
+      height = recreation_visitors, 
+      width = 0.75,
+      fill = nps_region_names
+    )
+  ) +
+  geom_text(
+    aes(
+      y = recreation_visitors,
+      label = paste0("   ",scales::comma(recreation_visitors))
+      ),
+    hjust = 0,
+    size = 6,
+    fontface = "bold",
+    colour = "grey30"
+    )+
+  geom_text(
+    aes(y = 0, label = paste0(park_name,"   ")),
+    colour = "black", 
+    fontface = "bold",
+    size = 4,
+    hjust = 1
+    )+
+  scale_y_continuous(
+    labels = scales::comma
+    #limits = c(-5.5e6,22e6)
+    ) +
+  scale_x_reverse() +
+  scale_fill_manual(
+    values = color_map, 
+    drop = FALSE
+    ) +
+  guides(fill = guide_legend(nrow=3)) +
+  coord_flip(clip = "off") + 
+  ylab(label = "Visitors") +
+  labs(title = "Top 15 Visited National Park Sites",
+       subtitle = "Annual Visitors: {as.integer(frame_time)}",
+       caption = "Recreational Visitors |Data Source: United States National Park Service",
+       fill = "NPS Region") +
+  theme_racing_bar()  +
+  transition_time(time = year) +
+  ease_aes('sine-in-out') +
+  view_follow(fixed_x = TRUE) 
+
+# Animation Plot
+# Super Lower Res for testing
+# nps_racing_bar_gif_test <- animate(
+#   plot = nps_racing_bar,
+#   nframes = 228,
+#   fps = 2,
+#   end_pause = 50,
+#   width = 1200,
+#   height = 900
+# )
+
+
+# # Lower Res for Twitter posts
+# nps_racing_bar_gif_lr <- animate(
+#   plot = nps_racing_bar,
+#   nframes = 1140,
+#   fps = 10,
+#   end_pause = 50,
+#   width = 1200,
+#   height = 900
+# )
+# 
+#Higher Res
+nps_racing_bar_gif_hr <- animate(
+  plot = nps_racing_bar,
+  nframes = 3000,
+  fps = 50,
+  end_pause = 50,
+  width = 1200,
+  height = 900
+)
+```
+
+## Run Animation
+
+```r
+#nps_racing_bar_gif_test
+#nps_racing_bar_gif_lr
+nps_racing_bar_gif_hr
+```
+
+![](index_files/figure-html/unnamed-chunk-4-1.gif)<!-- -->
+
+## Save Animation
+
+```r
+anim_save(filename = "nps_racing_bar_low_res.gif",
+          animation = nps_racing_bar_gif_lr,
+          path = "./data/")
+
+anim_save(filename = "nps_racing_bar_high_res.gif",
+          animation = nps_racing_bar_gif_hr,
+          path = "./data/")
+```
+
