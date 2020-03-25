@@ -1,0 +1,62 @@
+np_id,ParkName,np_established_year,latitude,longitude,nps_region
+1,Yellowstone NP,1872,44.39296,-110.55732,rocky_mountain
+2,Sequoia NP,1890,36.6044,-118.73422,western
+3,Yosemite NP,1890,37.74655,-119.59077,western
+4,Mount Rainier NP,1899,48.66621,-121.26425,pacific_northwest_and_alaska
+5,Crater Lake NP,1902,42.89641,-122.13391,pacific_northwest_and_alaska
+6,Wind Cave NP,1903,43.55605,-103.47852,rocky_mountain
+7,Mesa Verde NP,1906,37.25797,-108.49805,rocky_mountain
+8,Glacier NP,1910,48.52769,-113.99508,rocky_mountain
+9,Rocky Mountain NP,1915,40.36639,-105.5608,rocky_mountain
+10,Haleakala NP,1916,20.75938,-156.24664,western
+11,Hawaii Volcanoes NP,1916,19.4294,-155.25732,western
+12,Lassen Volcanic NP,1916,40.4375,-121.53425,western
+13,Denali NP & PRES,1917,63.73033,-148.91452,pacific_northwest_and_alaska
+14,Acadia NP,1919,44.40834,-68.2458,north_atlantic
+15,Grand Canyon NP,1919,36.05696,-112.13637,western
+16,Zion NP,1919,37.20953,-112.97949,rocky_mountain
+17,Hot Springs NP,1921,34.51373,-93.05342,southwest
+18,Bryce Canyon NP,1928,37.64021,-112.16912,rocky_mountain
+19,Grand Teton NP,1929,43.65726,-110.71684,rocky_mountain
+20,Carlsbad Caverns NP,1930,32.17495,-104.44411,southwest
+21,Everglades NP,1934,25.13938,-80.92821,southeast
+22,Great Smoky Mountains NP,1934,35.51539,-83.30537,southeast
+23,Shenandoah NP,1935,38.516997,-78.437337,mid_atlantic
+24,Olympic NP,1938,48.10067,-123.43113,pacific_northwest_and_alaska
+25,Kings Canyon NP,1940,36.79211,-118.66873,western
+26,Isle Royale NP,1940,47.91163,-89.15785,midwest
+27,Mammoth Cave NP,1941,37.18657,-86.10019,southeast
+28,Big Bend NP,1944,29.32212,-103.20734,southwest
+29,Virgin Islands NP,1956,18.33187,-64.79375,southeast
+30,Petrified Forest NP,1962,35.06625,-109.78247,western
+31,Canyonlands NP,1964,38.35313,-109.86276,rocky_mountain
+32,Guadalupe Mountains NP,1966,31.93351,-104.85351,southwest
+33,North Cascades NP,1968,48.66621,-121.26425,pacific_northwest_and_alaska
+34,Redwood NP,1968,41.2857,-124.09006,western
+35,Voyageurs NP,1971,48.43481,-92.85037,midwest
+36,Arches NP,1971,38.6161,-109.6197,rocky_mountain
+37,Capitol Reef NP,1971,38.29125,-111.26141,rocky_mountain
+38,Badlands NP,1978,43.74905,-101.94241,rocky_mountain
+39,Theodore Roosevelt NP,1978,46.91656,-103.52539,rocky_mountain
+40,Channel Islands NP,1980,34.02136,-119.57897,western
+41,Biscayne NP,1980,25.46334,-80.33469,southeast
+42,Gates of the Arctic NP & PRES,1980,67.56594,-153.26412,pacific_northwest_and_alaska
+43,Glacier Bay NP & PRES,1980,58.44674,-135.86156,pacific_northwest_and_alaska
+44,Katmai NP & PRES,1980,58.55168,-155.77909,pacific_northwest_and_alaska
+45,Kenai Fjords NP,1980,60.1052,-149.43489,pacific_northwest_and_alaska
+46,Kobuk Valley NP,1980,67.39136,-159.063,pacific_northwest_and_alaska
+47,Lake Clark NP & PRES,1980,60.2008,-154.321,pacific_northwest_and_alaska
+48,Wrangell-St. Elias NP & PRES,1980,61.20794,-142.24266,pacific_northwest_and_alaska
+49,Great Basin NP,1986,39.00557,-114.21954,western
+50,American Samoa NP,1988,-14.27933,-170.70089,western
+51,Dry Tortugas NP,1992,24.62673,-82.8727,southeast
+52,Saguaro NP,1994,32.25357,-111.19701,western
+53,Death Valley NP,1994,36.46083,-116.86581,western
+54,Joshua Tree NP,1994,33.74734,-115.8198,western
+55,Black Canyon of the Gunnison NP,1999,38.55478,-107.68618,rocky_mountain
+56,Cuyahoga Valley NP,2000,41.26288,-81.5588,midwest
+57,Congaree NP,2003,33.83035,-80.82405,southeast
+58,Great Sand Dunes NP & PRES,2004,37.7326,-105.51192,rocky_mountain
+59,Pinnacles NP,2013,36.49379,-121.14703,western
+60,Gateway Arch NP,2018,38.62469,-90.18477,midwest
+61,Indiana Dunes NP,2019,41.65326,-87.05243,midwest

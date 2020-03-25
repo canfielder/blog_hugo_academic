@@ -1,0 +1,269 @@
+---
+title: America's Best Idea - Part 1
+author: Evan Canfield
+date: '2020-03-24'
+slug: natural-park-circle_bar
+categories: [data viz]
+tags: ["R", "ggplot"]
+subtitle: Exploring America's National Parks
+summary: 'Visualization of visits to National Parks'
+authors: []
+lastmod: '2020-03-24T12:33:59-04:00'
+featured: no
+draft: false
+image:
+  caption: ''
+  focal_point: 'smart'
+  preview_only: yes
+projects: []
+---
+
+
+
+<p><strong>Note</strong>: This blog post is based on an original post made for an earlier blog, posted on 9/10/2019.</p>
+<blockquote>
+<p>National parks are the best idea we ever had. Absolutely American, absolutely
+democratic, they reflect us at our best rather than our worst.</p>
+<p><em>- Wallace Stegner</em></p>
+</blockquote>
+<p>I love America’s National Parks. The National Park Service administers 419 official units, of which 62 are designated National Parks, of which I’ve visited seven. My goal is to visit every single National Park, so I have a ways to go. And unfortunately, since I currently live on the eastern half of the United States, there are few parks close by. So, it could take a while.</p>
+<p>In the meantime, I look forward to experiencing the National Parks any way I can. So, I was delighted to recently learn that detailed information for every unit in the National Park system is available to the public. So in the next few post I am going to explore this data set as a way learn more about our National Parks, and to continue expanding my analytic toolbox. The data for this project can be found <a href="https://bit.ly/1kEMuRo">here</a> (make sure to select All Years, All Parks, and Summary Only? = False to get the full data set).</p>
+<p>Before I get started I would like to make note of the follow articles that also dive into this data set. These articles were definitely an inspiration. In some instances in future posts I will probably replicate some of the visuals in these articles, but again I am treating these posts primarily as a learning exercise.</p>
+<ul>
+<li><a href="https://fivethirtyeight.com/features/the-national-parks-have-never-been-more-popular">The National Parks Have Never Been More Popular</a> (accessed on 09/02/2019)</li>
+<li><a href="https://trizzletravels.com/nationalparks/">Visualizing Our National Parks</a> (accessed on 09/02/2019)</li>
+</ul>
+<div id="libraries-and-data" class="section level1">
+<h1>Libraries and Data</h1>
+<p>The following libraries were used for this analysis.</p>
+<pre class="r"><code>if (!require(pacman)) {install.packages(&#39;pacman&#39;)} 
+p_load(broom, data.table, janitor, plotly, png, readr, scales, stringr,
+       tidyverse, urbnmapr)</code></pre>
+<p>The follow data sets were used for this analysis. The primary data was the National Park Service Annual Summary Report, 1904-2018. This data set provides annual visitor data going back to 1904. In 1979 the National Park Service began collecting far more detailed information, which I plan on investigating in future posts. Additional data for geographical information, state and US region data, and color palette information are also used in the analysis.</p>
+<pre class="r"><code># NPS Visitors
+file_path &lt;- &quot;./data/annual_summary_report_1904-2018.csv&quot;
+nps_summary &lt;- read.csv(file_path, 
+                        stringsAsFactors = FALSE)
+
+# Location and Region Information
+file_path &lt;- &quot;./data/national_parks_location.csv&quot;
+list_np_locations &lt;- read.csv(file = file_path, 
+                              stringsAsFactors = FALSE)
+
+# NPS Region Color Table
+file_path &lt;- &quot;./data/nps_region_colors.csv&quot;
+nps_region_colors &lt;- read.csv(file_path,
+                              stringsAsFactors = FALSE)
+
+# List of States with Regions - Based on National Park Passports
+file_path &lt;- &quot;./data/state_list.csv&quot;
+state_nps_region &lt;- read.csv(file = file_path,
+                             stringsAsFactors = FALSE)
+
+# United States Shapefile - Alaska, Hawaii Inset
+file_path &lt;- &quot;./data/us_state_map.RDS&quot;
+us_states &lt;- readRDS(file = file_path)</code></pre>
+<p>As a personal preference I like a consistent case and labeling structure, so the data sets are appropriately cleaned using the janitor package.</p>
+<pre class="r"><code>nps_summary &lt;- nps_summary %&gt;% 
+  clean_names()
+
+list_np_locations &lt;- list_np_locations %&gt;% 
+  clean_names()
+
+nps_region_colors &lt;- nps_region_colors %&gt;% 
+  clean_names()
+
+state_nps_region &lt;- state_nps_region %&gt;% 
+  clean_names()</code></pre>
+</div>
+<div id="defining-the-geographic-regions" class="section level1">
+<h1>Defining the Geographic Regions</h1>
+<p>Each National Park is assigned to a geographic region, based on regions of the National Park Passport System. Use of this system is fairly arbitrary, but I’m a fan of the Passport System and am familiar with its regional breakdowns. I will also maintain the color palette used in the Passport System.</p>
+<pre class="r"><code>#Assign Colors to NPS Regions
+color_map &lt;- setNames(nps_region_colors$html_color_code_stamps,
+                      nps_region_colors$nps_region)</code></pre>
+<p>To visualize the regions I developed the following state level choropleth. Washington DC was removed as DC functions as it’s own region, but is not visible on the map.</p>
+<pre class="r"><code># Data Frame with State, Region, and FIPS code
+state_nps_region &lt;- state_nps_region %&gt;% 
+  left_join(select(statedata,state_fips:state_name) 
+            , by = &quot;state_name&quot;) %&gt;% 
+  select(state_fips, state_name, everything()) 
+
+# Join to Shapefile - Remove DC
+us_states_region &lt;- us_states %&gt;% 
+  left_join(
+    select(state_nps_region, state_fips, region),
+            by = &quot;state_fips&quot;) %&gt;% 
+  filter(state_fips != &quot;11&quot;)        # Remove Washington D.C.
+
+# List of Regions
+us_regions &lt;- c(&quot;Mid-Atlantic&quot;, &quot;Midwest&quot;, &quot;North Atlantic&quot;, 
+                &quot;PNW &amp; Alaska&quot;, &quot;Rocky Mountain&quot;, &quot;Southeast&quot;, 
+                &quot;Southwest&quot;, &quot;Western&quot;)
+
+# ggplot Visual
+ggplot() +
+  geom_polygon(
+    data = us_states_region 
+  , mapping = aes(x = long, y = lat, group = group, fill = region)
+  , color = &quot;gray90&quot;
+  , alpha = 0.75
+  , size = 0.25) +
+  scale_fill_manual(
+    values = color_map,
+    labels = us_regions
+   ) +
+  labs(fill = &quot;&quot;) +
+  coord_sf(datum = NA) +
+  labs(title = &quot;United States Geographical Regions&quot;
+       , subtitle = &quot;Based on National Park Passport Program&quot;) +
+  xlab(label = &quot;&quot;) +
+  ylab(label = &quot;&quot;)+
+  theme_minimal() +
+  theme(
+    legend.position = &quot;right&quot;
+  )</code></pre>
+<p><img src="/post/2020-03-24-natural-park-circle_bar/2020-03-24-natural-park-circle_bar_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Note that there are National Parks in American Samoa and Puerto Rico, both not pictured. American Samoa is part of the <strong>Western region</strong>, Puerto Rico part of the <strong>Southeast</strong> region.</p>
+</div>
+<div id="data-cleaning-and-preparation" class="section level1">
+<h1>Data Cleaning and Preparation</h1>
+<p>The end goal for this first post is to create a circular bar chart, showing the percent of total annual visitors each park received in 2018, with the parks grouped by geographical region, and ordered by visitor levels, to <a href="https://www.r-graph-gallery.com/297-circular-barplot-with-groups.html">the order bars graph</a> in the R Graph Gallery.</p>
+<p>The first step is to take the data from all the National Park System sites and reduce it to the major National Parks.</p>
+<pre class="r"><code>#Add NP to American Samoa Name for Downstream Filters
+#Remove National Park from the name. This is a formatting choice.
+nps_summary$park_name &lt;- str_replace_all(nps_summary$park_name
+                                               , &quot;National Park of American Samoa&quot;
+                                               , &quot;American Samoa NP&quot;)
+
+#Filter for National Park (NP) and National Preserve (NPRES)
+#This is due to some national parks also being National Preserves
+nps_summary_np &lt;- nps_summary %&gt;% 
+  filter(str_detect(string = park_name, &quot; NP&quot;)) %&gt;% 
+  filter(str_detect(string = park_name, &quot; NPRES&quot;) == FALSE)
+
+#Join Location Data by park_name
+nps_summary_np &lt;- nps_summary_np %&gt;% 
+  left_join(y = list_np_locations, by = c(&quot;park_name&quot;))
+
+#Filter Down to Only Park Name
+nps_summary_np$park_name &lt;- str_remove_all(nps_summary_np$park_name,
+                                           &quot; NP&quot;)
+
+nps_summary_np$park_name &lt;- str_remove_all(nps_summary_np$park_name,
+                                           &quot; &amp; PRES&quot;)
+
+#Filter Out Wolf Trap
+nps_summary_np &lt;- nps_summary_np %&gt;% 
+  filter(park_name != &#39;Wolf Trap for the Performing Arts&#39;)
+
+# Select Essential Variables
+nps_summary_np &lt;- nps_summary_np %&gt;% 
+  select(park_name:recreation_visitors, np_id:nps_region)</code></pre>
+<p>Now with a data set of only National Parks the data can be processed for use in a circular bar chart. For this chart we only care about the 2018 data.</p>
+<pre class="r"><code>#Filter for 2018
+nps_summary_np_2018 &lt;- nps_summary_np %&gt;% 
+  filter(year == 2018)
+
+# Calculate Percent Visit
+nps_summary_np_2018 &lt;- nps_summary_np_2018 %&gt;% 
+  mutate(percent_visit = round(
+    recreation_visitors/sum(recreation_visitors)*100
+    ,digits = 2))
+
+#Make NPS Region a Factor
+nps_summary_np_2018$nps_region &lt;- as.factor(nps_summary_np_2018$nps_region)
+
+#Arrange Data Input
+ nps_summary_np_2018 &lt;- nps_summary_np_2018 %&gt;%
+  arrange(nps_region, recreation_visitors)
+
+# Set a number of &#39;empty bars&#39; to add at the end of each group for spacing
+empty_bar &lt;- 3
+to_add &lt;- data.frame( matrix(NA, empty_bar*nlevels(nps_summary_np_2018$nps_region),
+                             ncol(nps_summary_np_2018)))
+colnames(to_add) &lt;- colnames(nps_summary_np_2018)
+to_add$nps_region &lt;- rep(levels(nps_summary_np_2018$nps_region), 
+                         each=empty_bar)
+nps_summary_np_2018 &lt;- rbind(nps_summary_np_2018, to_add)
+nps_summary_np_2018 &lt;- nps_summary_np_2018 %&gt;%
+  arrange(nps_region)
+nps_summary_np_2018$np_id &lt;- seq(1, nrow(nps_summary_np_2018))
+
+#Assign Labels to the Bars
+labels &lt;- nps_summary_np_2018
+ 
+# Calculate the angle of the labels
+number_of_bar &lt;- nrow(labels)
+
+angle &lt;- 90 - 360 * (labels$np_id - 0.5) / number_of_bar     
+
+# Substract 0.5 because the letter must have the angle 
+# of the center of the bars. 
+# Not extreme right(1) or extreme left (0)
+ 
+# Calculate the alignment of labels: right or left
+labels$hjust &lt;- ifelse( angle &lt; -105, 1, 0)
+ 
+# Flip angle by to make them readable
+labels$angle &lt;- ifelse(angle &lt; -105, angle + 180, angle)</code></pre>
+<p>With a processed data frame the bar chart can be created.</p>
+<pre class="r"><code># Reduce Margins
+margin_indent &lt;- -5
+
+p_297 &lt;-  
+  ggplot(data = nps_summary_np_2018, 
+          mapping = aes(x = as.factor(np_id), 
+                        y = percent_visit,
+                        group = nps_region,
+                        fill = nps_region)
+         ) +
+  geom_bar(
+    stat = &quot;identity&quot;, 
+    alpha = 0.75
+    ) +
+  coord_polar() +
+  geom_text(
+    data = labels,
+    mapping = aes(
+      x = np_id,
+      y = percent_visit + 0.5,
+      label = park_name,
+      hjust = hjust
+      ),
+    color = &quot;black&quot;,
+    fontface = &quot;bold&quot;,
+    alpha = 0.75,
+    size = 3.7,
+    angle = labels$angle,
+    inherit.aes = FALSE
+          ) +
+  # Split Legend into two columns
+  guides(fill = guide_legend(ncol=2)) +     
+  scale_fill_manual(
+    values = color_map,
+    labels = us_regions
+   ) +
+  # Set Axis. Negative y corresponds to size of center circle
+  ylim(-4.75, 16) +                            
+  labs(fill = &quot;National Park \n Regions&quot;) +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    legend.title =  element_text(size = 14,face=&quot;bold&quot;),
+    legend.title.align = 0.5,
+    legend.text = element_text(size = 9),
+    panel.grid = element_blank(),
+    # This remove unnecessary margin around plot
+    plot.margin = margin(margin_indent, margin_indent,
+                         margin_indent, margin_indent, &quot;cm&quot;),       
+    legend.position = c(0.5,0.51)
+    )
+
+ggsave(plot = p_297, filename = &quot;np_radial_bar.png&quot;, 
+       scale = 2, path = &quot;./images/&quot;)</code></pre>
+<pre><code>## Saving 24 x 24 in image</code></pre>
+<pre class="r"><code>p_297</code></pre>
+<p><img src="/post/2020-03-24-natural-park-circle_bar/2020-03-24-natural-park-circle_bar_files/figure-html/circ_bar-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
