@@ -12,7 +12,7 @@ lastmod: '2020-03-23T14:39:26-04:00'
 featured: yes
 draft: false
 image:
-  caption: ''
+  caption: 'test'
   focal_point: 'smart'
   preview_only: true
 projects: []
@@ -41,7 +41,7 @@ The following R packages are used for this post.
 ```{r import_packages, message=FALSE}
 if (!require(pacman)) {install.packages('pacman')} 
 
-p_load(grid, leaflet,stringr, tidyverse, tigris)
+p_load(grid, leaflet, stringr, tidyverse, tigris, widgetframe)
 
 options(tigris_use_cache = TRUE)
 ```
@@ -249,9 +249,9 @@ col_pal_leaflet <- colorNumeric(palette = "viridis",
                     domain = spdf_county_visited$visited)
 ```
 
-With everything all set, I can now generate the leaflet interactive visual.
+With everything all set, I can now generate the leaflet interactive visual. We use the **widgetframe** library due to the Hugo theme of this website not allowing htmlwidgets to be projected.
 ```{r leaflet_plot, out.width="100%"}
-leaflet(options = leafletOptions(minZoom = 3)) %>% 
+l <- leaflet(options = leafletOptions(minZoom = 3)) %>% 
   addTiles() %>% 
   addPolygons(data = spdf_state,
     color = "#2E4053",
@@ -278,6 +278,8 @@ leaflet(options = leafletOptions(minZoom = 3)) %>%
                lng2 = -60,
                lat1 = 73, 
                lat2 = 15)
+
+frameWidget(l)
 ```
 
 Admittedly, it runs a little slow, but is still pretty useful for determining what states and counties I might get on a future trip.
