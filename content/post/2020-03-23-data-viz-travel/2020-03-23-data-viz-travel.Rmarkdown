@@ -216,7 +216,7 @@ For now I'm going to try one last thing. I'm going to plot this data in **leafle
 
 I will use the US Census Bureau shapefiles, via the **Tigris** package. The **Tigris** package provides shapefiles as a **SpatialPolygonsDataFrame** type file. This data-type is accepted by Leaflet, so I don't need to convert to a standard dataframe.
 
-## ShapeFile Import
+## Shapefile Import
 ```{r tigris_shapefile_import}
 #State
 spdf_state <- states(cb = TRUE)
@@ -279,10 +279,10 @@ lf <- leaflet(options = leafletOptions(minZoom = 3)) %>%
                lat1 = 73, 
                lat2 = 15)
 
-htmlwidgets::saveWidget(widget = lf, file = "leaflet_figure.html", selfcontained = TRUE)
+htmlwidgets::saveWidget(widget = lf, file = "figure.html", selfcontained = TRUE)
 ```
 
-<iframe src="leaflet_figure.html" height = "500" width="100%"></iframe> 
+<iframe src="2020-03-23-data-viz-travel_files/figure-html/widgets/widget_leaflet_plot.html" height = "404" width="100%"></iframe> 
 
 Admittedly, it runs a little slow, but is still pretty useful for determining what states and counties I might get on a future trip.
 
