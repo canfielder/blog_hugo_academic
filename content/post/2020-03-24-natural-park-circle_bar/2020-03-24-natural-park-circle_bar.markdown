@@ -18,12 +18,11 @@ image:
 projects: []
 ---
 
-**Note**: This blog post is based on an original post made for an earlier blog, posted on 9/10/2019.
 
 > National parks are the best idea we ever had. Absolutely American, absolutely
 > democratic, they reflect us at our best rather than our worst.
 >
->*- Wallace Stegner*
+>- Wallace Stegner
 
 
 I love America's National Parks. The National Park Service administers 419 official units, of which 62 are designated National Parks, of which I've visited seven. My goal is to visit every single National Park, so I have a ways to go. And unfortunately, since I currently live on the eastern half of the United States, there are few parks close by. So, it could take a while. 

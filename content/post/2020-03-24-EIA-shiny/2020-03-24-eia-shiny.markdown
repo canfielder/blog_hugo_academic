@@ -19,7 +19,6 @@ projects: []
 runtime: shiny
 ---
 
-**Note**: This blog post is based on an original post made for my DSBA 5122 (Visual Analytics) class at UNC Charlotte, in the Spring of 2019.
 
 For the final project of the Spring 2019 DSBA 5122: Visual Analytics at University of North Carolina Charlotte class we were tasked with creating an interactive Shiny app based a topic of our choosing. Earlier in the semester I was introduced to a Washington Post article mapping how the United States generates its electricity. I was captivated by the visuals in the article of energy generation in the Untied states and the story they told. But the images, while evocative, were static. How would these images have looked if the article was written ten years earlier? Would it look about the same? Radically different? I wasn’t sure!
 

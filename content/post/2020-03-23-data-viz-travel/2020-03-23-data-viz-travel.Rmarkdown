@@ -22,8 +22,6 @@ projects: []
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE)
 ```
 
-**Note**: This blog post is based on an original post made for my DSBA 5122 (Visual Analytics) class at UNC Charlotte, in the Spring of 2019.
-
 Ever since I could remember I have loved maps. As a kid I could get lost in an atlas or inspecting a globe. As an adult that love of maps has remained, I mean, there's even a globe on the desk right next to me as I write this!
 
 So with that as background, it might not sound SO crazy to learn that back in 2018, I made a concerted effort to document where on those maps I had actually stepped foot. I kept it to the United States, since I really haven't traveled internationally that much. I started big picture: States! I figured out every state I had passed through in my life. This was pretty easy. I grew up in Connecticut, and mostly traveled around New England and the Northeast. The possible list was pretty short.

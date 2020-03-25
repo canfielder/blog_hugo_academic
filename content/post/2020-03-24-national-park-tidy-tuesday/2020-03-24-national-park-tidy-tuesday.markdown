@@ -18,7 +18,6 @@ image:
 projects: []
 ---
 
-**Note**: This blog post is based on an original post made for an earlier blog, posted on 9/16/2019.
 
 **Update:**
 After getting some great feedback on twitter from the #rstats community I was able to make a few tweaks to improve the racing bar chart. I'd like to thank @CedScherer who pointed me to this great [Github repo](https://github.com/amrrs/animated_bar_charts_in_R) and @JonTheGeek who directed me to last weeks [#TidyTuesday podcast](https://www.tidytuesday.com/3)
@@ -77,16 +76,7 @@ There appears to be missing data for Hot Springs National Park between 1905 and 
 x <- ts(c(109000,NA,NA,NA,NA,112000))
 
 y <- na.interpolation(x)
-```
 
-```
-## Warning: na.interpolation will replaced by na_interpolation.
-##            Functionality stays the same.
-##            The new function name better fits modern R code style guidelines.
-##            Please adjust your code accordingly.
-```
-
-```r
 # Input Interpolated Values
 nps_summary <- nps_summary%>%
   rbind(list("Hot Springs NP", 1906, y[2])) %>%
@@ -113,11 +103,6 @@ nps_summary_rank <- nps_summary %>%
   left_join(select(nps_region_colors, nps_region:nps_region_names),
             by = "nps_region" ) %>% 
   mutate(nps_region_names = as.factor(nps_region_names))
-```
-
-```
-## Warning: Column `park_name` joining factor and character vector, coercing
-## into character vector
 ```
 
 ## Color

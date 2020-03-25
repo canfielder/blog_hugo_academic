@@ -1,5 +1,5 @@
 ---
-title: "Amusement Park Injuries - #TidyTuesday"
+title: "Amusement Park Injuries #TidyTuesday"
 author: Evan Canfield
 date: '2020-03-24'
 slug: amusement-park
@@ -17,7 +17,7 @@ image:
   preview_only: no
 projects: []
 ---
-**Note**: This blog post is based on an original post made for an earlier blog, posted on 9/10/2019.
+
 
 For #tidytuesday we're looking at Amusement Park injuries. I plan on making a simple visual of the number of injuries by month.
 

@@ -17,8 +17,9 @@ image:
   preview_only: no
 projects: []
 ---
-
-**Note**: This blog post is based on an original post made for an earlier blog, posted on 9/16/2019.
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE)
+```
 
 **Update:**
 After getting some great feedback on twitter from the #rstats community I was able to make a few tweaks to improve the racing bar chart. I'd like to thank @CedScherer who pointed me to this great [Github repo](https://github.com/amrrs/animated_bar_charts_in_R) and @JonTheGeek who directed me to last weeks [#TidyTuesday podcast](https://www.tidytuesday.com/3)
