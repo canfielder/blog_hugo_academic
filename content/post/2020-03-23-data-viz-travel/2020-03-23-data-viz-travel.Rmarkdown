@@ -11,7 +11,6 @@ authors: []
 lastmod: '2020-03-23T14:39:26-04:00'
 featured: yes
 draft: false
-output: html_document
 image:
   caption: 'test'
   focal_point: 'smart'
