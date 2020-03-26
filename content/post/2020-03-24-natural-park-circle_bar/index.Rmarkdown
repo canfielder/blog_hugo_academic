@@ -14,7 +14,7 @@ draft: false
 image:
   caption: ''
   focal_point: 'smart'
-  preview_only: false
+  preview_only: ''
 projects: []
 ---
 ```{r setup, include = FALSE}
