@@ -78,7 +78,7 @@ $ ssh-keygen -t rsa
 ```
 Hit enter several times unit you see the following on your screen.
 
-{{< figure src="imgs/ssh_key_gen_output.png" lightbox="true" width="95%">}}
+{{< figure src="imgs/ssh_key_gen_output.png" lightbox="true" width="75%">}}
 
 **Note**: _You can enter a file location and password for your ssh key if you want, but for now I don't feel I need either._
 
@@ -89,7 +89,7 @@ Then, to access the key I just entered then perform the the following to access 
 $ cat /home/ec2-user/.ssh/id_rsa.pub
 ```
 
-{{< figure src="imgs/ssh_key_gen_output_edit.png" lightbox="true" width="95%">}}
+{{< figure src="imgs/ssh_key_gen_output_edit.png" lightbox="true" width="75%">}}
 
 The above command will then display the entire ssh key. I copy the entire key add it to my SSH keys in GitHub, under *Settings > SSH and GPG keys*. 
 
@@ -115,7 +115,7 @@ As a nice-to-have, I like to create a Makefile. The Makefile allows for simple c
 
 To create a Makefile from the command line, enter the following command in the working directory of your project. 
 
-**Note**: _Make sure the Makefile is **TAB SPACED**. If not the Makefile won't function correctly._
+**Note**: _Make sure the Makefile is **TAB SPACED**. If not the Makefile will not function correctly._
 
 As an exmple of a Makefile, hee is the one I created for this project. 
 
@@ -160,7 +160,7 @@ To get CircleCI to work, I need to add the file *config.yml* to a subfolder of m
 ##Step 2b - Create the Flask App
 The flask app is pretty straightforward. It employs some html coding, which is not my strong suit. The app takes the feature variables as inputs and generates a predicted wine quality score. The app uses the pickled random forest regression and standard scalar objects. 
 
-See the main github repo for the complete code.
+See the main [GitHub repo](https://github.com/canfielder/DSBA-6190_Proj) for the complete code.
 
 # Step 3 - Put Flask App in Docker Container
 Finally, the whole point of this project. I will now put my Flask app into a Docker Container. 
@@ -192,7 +192,7 @@ CMD ["python", "main.py"]
 
 **Note**: _I am including in this Dockerfile an additional seperate Docker image, **python 3.7.3-strech**. This Docker image has all of the Python functions I need, like pip. Think of it as a shortcut to creating an evinoment that will run expected Python functions. This way, the needed functions do not need to be installed one by one._
 
-Notice the command **EXPOSE 8080**. In this Dockerfile this doesn't actually do anything. But it does tell me, the user, that the open port in my Docker Container is port 8080. I definied this open port in the file **main.py**. But by putting this command in the Dockerfile, I , and whoever is next working on this project, doesn't have to dig for it.
+Notice the command **EXPOSE 8080**. In this Dockerfile this doesn't actually do anything. But it does tell me, the user, that the open port in my Docker Container is port 8080. I definied this open port in the file **main.py**. But by putting this command in the Dockerfile, neither I, nor whoever is working on this project in the future, has to dig for it.
 
 ## Create Container
 Now that the Dockerfile has been created, and placed in the working directory of the project, I can create a Docker container. All I need to do is run **docker build** on the command line, and supply a name and version, followed by a perid. **Do Not Forget The Period!** It's very easy to overlook. I believe this is telling the **docker build** command the Dockerfile is in the working directory. If, for some reason, the container was in a sub-directory, instead of a period I would add a relative path to that sub-directory (I think).
@@ -202,13 +202,15 @@ Now that the Dockerfile has been created, and placed in the working directory of
 $ docker build flask_app:1.0 .
 ```
 
-If everything went as planned, then in a couple minutes the Docker Container will be built. 
+If everything went as planned, then within a couple minutes the Docker container will be built. 
 
 **Note**: _Sometimes in Cloud9 there are old Docker Images on my machine. I don't know why. But this can eat up space. If your **docker build** fails, check if your machine's memory is being eaten up by other docker images. If so, remove them._
 
-I can check if my image was successfully built with the **docker images** command. 
+To see all built Docker containers, including the one I just created, use the following command: 
 
-{{< figure src="imgs/docker_images.png" lightbox="true" width="95%">}}
+```console
+$ docker images
+``'
 
 ## Run Container
 So, I've built a container. Great! But now what? How do I access my Flask app? To do that I need to **run** the container. This will activte the **CMD** command in my Dockerfile, which will execute following command:
@@ -222,16 +224,18 @@ This **main.py** file is the main file in my Flask app. So running the Docker Co
 So, to actually run the Docker Container, all I need to do is enter the following:
 
 ```console
-$ docker run
+$ docker run --rm -d -p 8080:8080 flask_app:1.0
 ```
 
 I'm sure you noticed the differnet flags and arguments in the **docker run** command. A few notes on that:
 
-* --rm: Remove docker image after run is stopped. This is useful to prevent a build up of stopped containers.
-* -d: Docker runs the container in the background. This gives me access to my current terminal.
-* -p: This argument maps the docker port to the local port, in this case 8080 to 8080. Remember, the exposed Docker port is 8080, per the Dockerfile.
+* **rm**: Remove docker image after run is stopped. This is useful to prevent a build up of stopped containers.
+* **d**: Docker runs the container in the background. This gives me access to my current terminal.
+* **p**: This argument maps the docker port to the local port, in this case 8080 to 8080. Remember, the exposed Docker port is 8080, per the Dockerfile.
 
-I also followed it up with the following command, which lists running Docker containers, to verify it is running.
+Also, be aware of the **-v** tag with **docker run**. This is a powerful tag which enables a developer to map a directory in their local files to the a directory in the Docker container. This makes it possible to edit Docker container files locally. 
+
+I also followed it up with this command, which lists running Docker containers, to verify it is running.
 
 ```console
 $ docker ps
@@ -240,7 +244,7 @@ $ docker ps
 You can see in the **docker ps** call that the ports I assigned in the **docker run** call are being mapped as intended.
 
 ## Verify Flask App is Running
-With the Docker container running,I need to verify that the Flask app is running. Cloud9 now offers a very useful tool for this. Just click **Preview** at the top of the screen, then select "Preview From Running Application".  
+With the Docker container running,I need to verify that the Flask app is running. Cloud9 now offers a very useful tool for this. Just click **Preview** followed by **Preview From Running Application** from the drop-down menu.
 
 {{< figure src="imgs/Cloud9 - Preview - Before Click - Drop Down.png" lightbox="true" width="95%">}}
 
@@ -248,7 +252,7 @@ This will then open a new screen, showing the running app.
 
 {{< figure src="imgs/Cloud9 - Preview -After.png" lightbox="true" width="95%">}}
 
-I belive you need to use local port 8080 for this to work. Google's equivalent service allows more flexibilty on what the localhost port has to be, but I think with Cloud9 it has to be 8080.
+**Note**: _I belive you need to use local port **8080** for this to work. Google's equivalent service allows more flexibilty on what the localhost port has to be, but I think with Cloud9 it has to be **8080**._
 
 With the Docker container built, running, and the application tested, I can shut down the running conainer. Just run **docker stop <container id>**. You can pull the container id from **docker ps**.
 
@@ -318,13 +322,13 @@ Once pulled, the same commands to run the Docker container used in Cloud9 apply 
 
 GCP also has a web preview button, so once the Flask App is running, I can quickly see it. With GCP, the web preview opens on a new window.
 
-{{< figure src="imgs/GCP - Web Preview.png" lightbox="true" width="95%">}}
+{{< figure src="imgs/app_web_preview.png" lightbox="true" width="95%">}}
 
 Success! 
 
 # Conclusion
 Through this walkthrough I have:
--[x] Developed a simple Flask app with a scikit learn model embedded.
--[x] Created a Docker container in AWS for the Flask app.
--[x] Pushed the container to DockerHub.
--[x] Pulled the saem container to GCP, where it successfully ran.
+- [x] Developed a simple Flask app with a scikit learn model embedded.
+- [x] Created a Docker container in AWS for the Flask app.
+- [x] Pushed the container to DockerHub.
+- [x] Pulled the saem container to GCP, where it successfully ran.
