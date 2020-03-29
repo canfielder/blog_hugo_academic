@@ -12,7 +12,7 @@ subtitle: 'DSBA-6190 Discussion: Week 11'
 summary: 'Week 11 Discussion for DSBA 6190 - Introduction to Cloud Computing'
 authors: []
 lastmod: '2020-03-29T10:17:48-04:00'
-draft: True 
+#draft: True 
 featured: no
 image:
   caption: ''
