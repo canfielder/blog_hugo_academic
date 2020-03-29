@@ -20,7 +20,7 @@ image:
   preview_only: no
 projects: []
 ---
-#### A note on the series
+#### A note on the series:
 This post is part of a series of weekly discussion prompts for my class **DSBA-6190: Introduction to Cloud Computing**. Each prompt includes two or three general questions on a cloud computing related topic, along with screenshot from a interactive online lab. 
 
 # What problems does Hadoop solve?
