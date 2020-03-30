@@ -13,7 +13,7 @@ summary: 'Week 10 Discussion for DSBA 6190 - Introduction to Cloud Computing'
 authors: []
 lastmod: '2020-03-29T15:57:55-04:00'
 featured: no
-#draft: true
+draft: true
 image:
   caption: ''
   focal_point: ''
@@ -21,7 +21,7 @@ image:
 projects: []
 ---
 #### A note on the series:
-This post is part of a series of weekly discussion prompts for my class **DSBA-6190: Introduction to Cloud Computing**. Each prompt includes two or three general questions on a cloud computing related topic, along with screenshot from a interactive online lab. 
+This post is part of a series of weekly discussion prompts for my class **DSBA-6190: Introduction to Cloud Computing**. Each prompt includes two or three general questions on a cloud computing related topic, along with screenshot from a interactive online lab.
 
 # What problems does Google App Engine solve?
 The Google App Engine (GAE) solves similar problems to other cloud-based services I have covered in previous weeks. Namely, it shifts system management duties to outside experts which allows the user to focus their efforts on their product. GAE is a PaaS, Platform as a Service. That means Google engineers will spend their time (and considerable expertise) handling platform and infrastructure management. If your team, or you personally, don’t have those skills, this is a huge win. Not only do you not lose time haphazardly building those skills, there are actual experts who are going to pick that slack for you.
@@ -50,7 +50,7 @@ Thank you to the following resources for help and input on this question.
 
 # Interactive Lab
 ### Post a screenshot of a lab where you had difficulty with a concept or learned something.
-This week’s training was about accessing and using Virtual Machines within Google Cloud Platform, on Google Qwiklabs. This training introduced me to another environment I could potentially work and develop in. This appears to be a less structured sandbox than other environments, which has its pros and cons. It’s good to know if I need more flexibility these resources are available. 
+This week’s training was about accessing and using Virtual Machines within Google Cloud Platform, on Google Qwiklabs. This training introduced me to another environment I could potentially work and develop in. This appears to be a less structured sandbox than other environments, which has its pros and cons. It’s good to know if I need more flexibility these resources are available.
 
 No screenshot this time. The training wasn’t very visual, and the one screenshot I took was badly sized, cropping some necessary information.
 
