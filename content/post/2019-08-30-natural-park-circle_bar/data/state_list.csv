@@ -1,0 +1,52 @@
+state_name,region
+Alabama,southeast
+Alaska,pacific_northwest_and_alaska
+Arizona,western
+Arkansas,southwest
+California,western
+Colorado,rocky_mountain
+Connecticut,north_atlantic
+Delaware,mid_atlantic
+District of Columbia,national_capital
+Florida,southeast
+Georgia,southeast
+Hawaii,western
+Idaho,pacific_northwest_and_alaska
+Illinois,midwest
+Indiana,midwest
+Iowa,midwest
+Kansas,midwest
+Kentucky,southeast
+Louisiana,southwest
+Maine,north_atlantic
+Maryland,mid_atlantic
+Massachusetts,north_atlantic
+Michigan,midwest
+Minnesota,midwest
+Mississippi,southeast
+Missouri,midwest
+Montana,rocky_mountain
+Nebraska,midwest
+Nevada,western
+New Hampshire,north_atlantic
+New Jersey,mid_atlantic
+New Mexico,southwest
+New York,north_atlantic
+North Carolina,southeast
+North Dakota,rocky_mountain
+Ohio,midwest
+Oklahoma,southwest
+Oregon,pacific_northwest_and_alaska
+Pennsylvania,mid_atlantic
+Rhode Island,north_atlantic
+South Carolina,southeast
+South Dakota,rocky_mountain
+Tennessee,southeast
+Texas,southwest
+Utah,rocky_mountain
+Vermont,north_atlantic
+Virginia,mid_atlantic
+Washington,pacific_northwest_and_alaska
+West Virginia,mid_atlantic
+Wisconsin,midwest
+Wyoming,rocky_mountain
