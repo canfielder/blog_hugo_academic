@@ -61,5 +61,3 @@ One thing I realized was there wasn’t much documentation on the code that I co
 
 
 {{< figure src="imgs/random_piano.png" lightbox="true" width="95%">}}
-
-
