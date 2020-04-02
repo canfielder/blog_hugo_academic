@@ -9,7 +9,7 @@ subtitle: ''
 summary: 'Deploying a scikit learn model from a Flask App in a Docker Container.'
 authors: []
 lastmod: '2020-03-24T12:33:59-04:00'
-featured: no
+featured: yes
 draft: false
 image:
   caption: ''
