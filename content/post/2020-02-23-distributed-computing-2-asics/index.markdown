@@ -50,7 +50,7 @@ Amdahl’s law regards the relationship to the number of processors and the spee
 
 This is why new specialized ASICs will be very important for machine learning going forward. The current general components have limited ability to handle the increasing size and complexity of machine learning tasks. These new ASICs will help handle what is to come.
 
-I do need to point out one caveat. I think an important question is how much gain can ASICs actually provide? I did find one paper which indicated the ASICs will eventually hit their own limits [http://parallel.princeton.edu/papers/wall-hpca19.pdf](http://parallel.princeton.edu/papers/wall-hpca19.pdf). So, it is possible the growth of ASICs will lead to ever increasing speeds. Or perhaps, ASICs will just be a step-function. A quick shot in the arm to handle large quantities of data, but then speed increases will simply level off again.
+I do need to point out one caveat. I think an important question is how much gain can ASICs actually provide? I did find one paper, out of Princeton, which indicated the ASICs will eventually hit their own limits ([here](http://parallel.princeton.edu/papers/wall-hpca19.pdf)). So, it is possible the growth of ASICs will lead to ever increasing speeds. Or perhaps, ASICs will just be a step-function. A quick shot in the arm to handle large quantities of data, but then speed increases will simply level off again.
 
 # Interactive Lab
 ### Find, run and extend a notebook in seedbank and share along with your comments on what you learned.
