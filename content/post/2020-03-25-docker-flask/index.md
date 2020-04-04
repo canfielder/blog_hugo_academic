@@ -35,18 +35,18 @@ So, with that deviation noted, the workflow for this project was as follows:
 2. Create Flask app, using the pickled model.
 3. Containerize the Flask app in a Docker Container.
 4. Upload an image of the container to DockerHub.
-5. Dowload the image of the container in a new evironemnt and test
+5. Download the image of the container in a new evironment and test
 
-## Working Enrionments
+## Working Enironments
 
 For the work of developing a model in a notebook, I used Google Colab. For Flask app and docker container development I worked in the AWS Cloud9 space. Finally, to test that the docker image was successfully created and deployed to DockerHub, I deployed the docker image to new environment, in this case Google Cloud Platform. 
 
 # Step 1 - Develop a Model
 Before I developed a model, I needed to identify a problem and an associated dataset. As this project was about created a Docker Container, and not data processing or model accuracy, I decided to pick a pretty simple, clean dataset. I went with the Wine Dataset from the UCI Machine Learning Repository. There's a good chance you've seen it before. It's not **Iris** popular, but it's popular. The dataset can be found here: [https://archive.ics.uci.edu/ml/datasets/wine](https://archive.ics.uci.edu/ml/datasets/wine).
 
-I focused only on the Red Wine part of the data. The data contained 12 variables, 11 features with one dependent variable. The dependednt variable was **wine quality** one a 1 - 10 scale. All variables were contiuous. 
+I focused only on the Red Wine part of the data. The data contained 12 variables, 11 features with one dependent variable. The dependent variable was **wine quality** one a 1 - 10 scale. All variables were continuous. 
 
-In summary, I ran ran the data through four different regression models: linear regression, random forest regression, gradient boost regression, and support vector machines regression. The input data was also scalled with a Standard Scalar. 
+In summary, I ran the data through four different regression models: linear regression, random forest regression, gradient boost regression, and support vector machines regression. The input data was also scaled with a Standard Scalar. 
 
 The full analysis can be best seen in the notebook here: [https://github.com/canfielder/DSBA-6190_Proj2/blob/master/wine_predict/wine_quality_predict.ipynb](https://github.com/canfielder/DSBA-6190_Proj2/blob/master/wine_predict/wine_quality_predict.ipynb)
 
@@ -60,12 +60,12 @@ As the class this project is for is a Cloud Computing class, most of the work I 
 So before I started developing the Flask app I needed to set up the working environment. This isn't actually specific to this project. Instead it's some baseline actions I try to take with every project.
 
 ## Step 2a - Setup
-###  Create and Environemnt
+###  Create and Environment
 Since I'm working in AWS Cloud9, I need to create an environment.
 
 {{< figure src="imgs/aws_cloud9_create_environment_edit.png" lightbox="true" width="95%">}}
 
-Creating an Environment in Cloud9 essentially means generaing an instance. I need to pick that instances size. This project should require too much memory, but to play it safe I'm gonig to go with the **t3.small** instance type over the **nano**. I stay with the default settings for everything else.
+Creating an Environment in Cloud9 essentially means generating an instance. I need to pick that instances size. This project should require too much memory, but to play it safe I'm going to go with the **t3.small** instance type over the **nano**. I stay with the default settings for everything else.
 
 {{< figure src="imgs/aws_cloud9_instance_type.png" lightbox="true" width="95%">}}
 
@@ -82,7 +82,7 @@ Hit enter several times unit you see the following on your screen.
 
 **Note**: _You can enter a file location and password for your ssh key if you want, but for now I don't feel I need either._
 
-Then, to access the key I just entered then perform the the following to access the generated key. The path that I am accessing is the path provided to me in the image above.
+Then, to access the key I just entered then perform the following to access the generated key. The path that I am accessing is the path provided to me in the image above.
 
 
 ```console
@@ -91,9 +91,9 @@ $ cat /home/ec2-user/.ssh/id_rsa.pub
 
 {{< figure src="imgs/ssh_key_gen_output_edit.png" lightbox="true" width="75%">}}
 
-The above command will then display the entire ssh key. I copy the entire key add it to my SSH keys in GitHub, under *Settings > SSH and GPG keys*. 
+The above command will then display the entire SSH key. I copy the entire key add it to my SSH keys in GitHub, under *Settings > SSH and GPG keys*. 
 
-With the SSH keypair added to both the Cloud9 Instance and GitHub, I can easily clone the project repo to my evironment. This makes source control a lot easier.
+With the SSH keypair added to both the Cloud9 Instance and GitHub, I can easily clone the project repo to my environment. This makes source control a lot easier.
 
 ### Setup Python Essentials
 Since I am working with Python, I like to setup a couple different things, some a requirements, some are just nice-to-haves. The following sections go through some basics.
@@ -101,7 +101,7 @@ Since I am working with Python, I like to setup a couple different things, some 
 #### Create and Activate Virtual Environment
 If I'm going to be installin packages, I need a virtual environment. I know my Cloud9 environment is using Python3 (3.6.10 at the time of this work, to be exact), so I use the following command to create and then activate the virtual environment. 
 
-**Note**: _The last argument in the code is what I am choosing to call my virtual environment folder. Any string will do. Common names are **venv** and **.venv**. I like to name my virtual environments the same as the project folder, with a leading period. But you can name it any string you want. Just make sure you add the virtual environment folder to your gitignore. No need to bakc those up to GitHub._
+**Note**: _The last argument in the code is what I am choosing to call my virtual environment folder. Any string will do. Common names are **venv** and **.venv**. I like to name my virtual environments the same as the project folder, with a leading period. But you can name it any string you want. Just make sure you add the virtual environment folder to your gitignore. No need to back those up to GitHub._
 
 
 ```console
@@ -111,13 +111,13 @@ $ python3 -m venv .flask_app
 #### Requirements and Makefile
 In order to install the needed python packages I create a *requirements.txt* file. This file lists all of the packages I plan to use for this Flask app.
 
-As a nice-to-have, I like to create a Makefile. The Makefile allows for simple commands to execute common and repeated actions, such as installs, testing, and running files. It will also become very usefule when I setup Continuous Integration with CircleCI (to come, later). 
+As a nice-to-have, I like to create a Makefile. The Makefile allows for simple commands to execute common and repeated actions, such as installs, testing, and running files. It will also become very useful when I setup Continuous Integration with CircleCI (to come, later). 
 
 To create a Makefile from the command line, enter the following command in the working directory of your project. 
 
 **Note**: _Make sure the Makefile is **TAB SPACED**. If not the Makefile will not function correctly._
 
-As an exmple of a Makefile, hee is the one I created for this project. 
+As an example of a Makefile, here is the one I created for this project. 
 
 
 ```console
@@ -146,12 +146,12 @@ all:
 	install lint test
 ```
 
-Currently my testing steps are commented out. I never quite got them to work. But I leave them in as an exmple of how to easy run tests with a Makefile.
+Currently my testing steps are commented out. I never quite got them to work. But I leave them in as an example of how to easy run tests with a Makefile.
 
 With this Makefile, for example, when I want to install the packages in  *requirements.txt* , now all I need to do is enter **make install** on the command line, and python with upgrade pip, if needed, and then install the indicated packages.
 
 ### Continuous Integration
-I like to connect my GitHub Repo to CircleCI. CircleCI is a Continuous Integration and Development tool. Everytime a change is detected in the GitHub repo, CircleCI will automatically rebuild the repo and perform any tasks you tell it to, such as testing. This way you can quickly tell if a change you made to your project accidentally broke something, or if the code is behaving askew. For this project I'm only going to set up CircleCI to lint select python scripts, but I think it's a good habit to get into to set up Continuous Integration monitoring for any project I'm working. 
+I like to connect my GitHub Repo to CircleCI. CircleCI is a Continuous Integration and Development tool. Every time a change is detected in the GitHub repo, CircleCI will automatically rebuild the repo and perform any tasks you tell it to, such as testing. This way you can quickly tell if a change you made to your project accidentally broke something, or if the code is behaving askew. For this project I'm only going to set up CircleCI to lint select python scripts, but I think it's a good habit to get into to set up Continuous Integration monitoring for any project I'm working. 
 
 To get CircleCI to work, I need to add the file *config.yml* to a subfolder of my repo named *.circleci*. Default *config.yml* files are available at CircleCI, and are specific to each programming language. The screenshot below shows a custom section of my *config.yml*. This section tells CircleCI to lint select Python files. You may notice that I'm using the Makefile commands to execute this command.  
 
@@ -168,7 +168,7 @@ Finally, the whole point of this project. I will now put my Flask app into a Doc
 Another bonus for Cloud9 is that it already has docker installed. No extra setup required, I can just go right into working with docker. 
 
 ## Dockerfile
-In order to create a docker container, I need to create a Dockerfile. A Dockerfile lists the instructions for how the docker container is going to be built. The the following is the Dockerfile for this project.
+In order to create a docker container, I need to create a Dockerfile. A Dockerfile lists the instructions for how the docker container is going to be built. The following is the Dockerfile for this project.
 
 ```python
 FROM python:3.7.3-stretch
@@ -190,12 +190,12 @@ EXPOSE 8080
 CMD ["python", "main.py"]
 ```
 
-**Note**: _I am including in this Dockerfile an additional seperate Docker image, **python 3.7.3-strech**. This Docker image has all of the Python functions I need, like pip. Think of it as a shortcut to creating an evinoment that will run expected Python functions. This way, the needed functions do not need to be installed one by one._
+**Note**: _I am including in this Dockerfile an additional separate Docker image, **python 3.7.3-strech**. This Docker image has all of the Python functions I need, like pip. Think of it as a shortcut to creating an evironment that will run expected Python functions. This way, the needed functions do not need to be installed one by one._
 
-Notice the command **EXPOSE 8080**. In this Dockerfile this doesn't actually do anything. But it does tell me, the user, that the open port in my Docker Container is port 8080. I definied this open port in the file **main.py**. But by putting this command in the Dockerfile, neither I, nor whoever is working on this project in the future, has to dig for it.
+Notice the command **EXPOSE 8080**. In this Dockerfile this doesn't actually do anything. But it does tell me, the user, that the open port in my Docker Container is port 8080. I defined this open port in the file **main.py**. But by putting this command in the Dockerfile, neither I, nor whoever is working on this project in the future, has to dig for it.
 
 ## Create Container
-Now that the Dockerfile has been created, and placed in the working directory of the project, I can create a Docker container. All I need to do is run **docker build** on the command line, and supply a name and version, followed by a perid. **Do Not Forget The Period!** It's very easy to overlook. I believe this is telling the **docker build** command the Dockerfile is in the working directory. If, for some reason, the container was in a sub-directory, instead of a period I would add a relative path to that sub-directory (I think).
+Now that the Dockerfile has been created, and placed in the working directory of the project, I can create a Docker container. All I need to do is run **docker build** on the command line, and supply a name and version, followed by a period. **Do Not Forget The Period!** It's very easy to overlook. I believe this is telling the **docker build** command the Dockerfile is in the working directory. If, for some reason, the container was in a sub-directory, instead of a period I would add a relative path to that sub-directory (I think).
 
 
 ```console
@@ -207,13 +207,13 @@ If everything went as planned, then within a couple minutes the Docker container
 **Note**: _Sometimes in Cloud9 there are old Docker Images on my machine. I don't know why. But this can eat up space. If your **docker build** fails, check if your machine's memory is being eaten up by other docker images. If so, remove them._
 
 To see all built Docker containers, including the one I just created, use the following command: 
-
+build up 
 ```console
 $ docker images
 ``'
 
 ## Run Container
-So, I've built a container. Great! But now what? How do I access my Flask app? To do that I need to **run** the container. This will activte the **CMD** command in my Dockerfile, which will execute following command:
+So, I've built a container. Great! But now what? How do I access my Flask app? To do that I need to **run** the container. This will activate the **CMD** command in my Dockerfile, which will execute following command:
 
 ```console
 $ python main.py
@@ -227,9 +227,9 @@ So, to actually run the Docker Container, all I need to do is enter the followin
 $ docker run --rm -d -p 8080:8080 flask_app:1.0
 ```
 
-I'm sure you noticed the differnet flags and arguments in the **docker run** command. A few notes on that:
+I'm sure you noticed the different flags and arguments in the **docker run** command. A few notes on that:
 
-* **rm**: Remove docker image after run is stopped. This is useful to prevent a build up of stopped containers.
+* **rm**: Remove docker image after run is stopped. This is useful to prevent a build-up of stopped containers.
 * **d**: Docker runs the container in the background. This gives me access to my current terminal.
 * **p**: This argument maps the docker port to the local port, in this case 8080 to 8080. Remember, the exposed Docker port is 8080, per the Dockerfile.
 
@@ -244,7 +244,7 @@ $ docker ps
 You can see in the **docker ps** call that the ports I assigned in the **docker run** call are being mapped as intended.
 
 ## Verify Flask App is Running
-With the Docker container running,I need to verify that the Flask app is running. Cloud9 now offers a very useful tool for this. Just click **Preview** followed by **Preview From Running Application** from the drop-down menu.
+With the Docker container running, I need to verify that the Flask app is running. Cloud9 now offers a very useful tool for this. Just click **Preview** followed by **Preview From Running Application** from the drop-down menu.
 
 {{< figure src="imgs/Cloud9 - Preview - Before Click - Drop Down.png" lightbox="true" width="95%">}}
 
@@ -252,9 +252,9 @@ This will then open a new screen, showing the running app.
 
 {{< figure src="imgs/Cloud9 - Preview -After.png" lightbox="true" width="95%">}}
 
-**Note**: _I belive you need to use local port **8080** for this to work. Google's equivalent service allows more flexibilty on what the localhost port has to be, but I think with Cloud9 it has to be **8080**._
+**Note**: _I believe you need to use local port **8080** for this to work. Google's equivalent service allows more flexibility on what the localhost port has to be, but I think with Cloud9 it has to be **8080**._
 
-With the Docker container built, running, and the application tested, I can shut down the running conainer. Just run **docker stop <container id>**. You can pull the container id from **docker ps**.
+With the Docker container built, running, and the application tested, I can shut down the running container. Just run **docker stop <container id>**. You can pull the container id from **docker ps**.
 
 
 ```console
@@ -273,7 +273,7 @@ With DockerHub set up, I can go back to my Cloud9 environment.  I need to log in
 $ docker login
 ```
 
-Before I can make the push my Docker container to DockerHub, I need to rename/tag the container so that it has a naming convention DockerHub will understand. To push to DockerHub, the naming covention needs to be :
+Before I can make the push my Docker container to DockerHub, I need to rename/tag the container so that it has a naming convention DockerHub will understand. To push to DockerHub, the naming convention needs to be:
 
 
 ```console
@@ -287,13 +287,13 @@ In my case, this means:
 canfielder/flask_app:1.0
 ```
 
-To rename my docker container, I will use the command **docker tag**. Below you can see mya available images after running **docker tag**. You can see the original container/image is there, was well as a copy with the new tag. 
+To rename my docker container, I will use the command **docker tag**. Below you can see my available images after running **docker tag**. You can see the original container/image is there, as well as a copy with the new tag. 
 
 **Note**: _I used the tag **latest** instead of **1.0**. This is the default version if no version is supplied. Any version tag is fine, just be specific._
 
 {{< figure src="imgs/docker_tag.png" lightbox="true" width="95%">}}
 
-With the Docker container in the right format, the login sucessfully entered, and a repository at DockerHub set up, pushing to DockerHub is easy. I just enter:
+With the Docker container in the right format, the login successfully entered, and a repository at DockerHub set up, pushing to DockerHub is easy. I just enter:
 
 
 ```console
@@ -303,7 +303,7 @@ $ docker push canfielder/flask_app:latest
 # Step 5
 To test that the push to DockerHub was successful, I'm going to go to a different cloud service and try to pull the Docker container, and then run it. I'll used Google Cloud Platform (GCP)for this test.
  
-Once at the GCP dashboard, I create a new project. Once the project up and running, I can go strainght to the Cloud Shell. 
+Once at the GCP dashboard, I create a new project. Once the project up and running, I can go straight to the Cloud Shell. 
 
 Much like AWS Cloud9, GCP already has Docker enabled, so no extra setup. Just follow the same **docker login** instructions from before, and enter the needed login information.
 
@@ -331,4 +331,4 @@ Through this walkthrough I have:
 - [x] Developed a simple Flask app with a scikit learn model embedded.
 - [x] Created a Docker container in AWS for the Flask app.
 - [x] Pushed the container to DockerHub.
-- [x] Pulled the saem container to GCP, where it successfully ran.
+- [x] Pulled the same container to GCP, where it successfully ran.
