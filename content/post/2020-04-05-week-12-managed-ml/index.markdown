@@ -1,5 +1,5 @@
 ---
-title: 'Managed ML Systems'
+title: 'Managed ML Systems - Amazon Sagemaker'
 author: Evan Canfield
 date: '2020-04-05'
 slug: dsba-6190-discussion-week-12-managed-ml
@@ -22,7 +22,7 @@ projects: []
 #### A note on the series:
 This post is part of a series of weekly discussion prompts for my class **DSBA-6190: Introduction to Cloud Computing**. Each prompt includes two or three general questions on a cloud computing related topic, along with screenshot from a interactive online lab. 
 
-# What problems does Sagemaker solve?
+# What problems does Amazon Sagemaker solve?
 Sagemaker is a service provided by Amazon Web Services that per Amazon, “is a modular, fully managed machine learning service that enables developers and data scientists to build, train, and deploy ML models at scale.” Sagemaker places many of the parts required to develop a production level model in one location, allowing for a more streamlined process and a clean machine learning (ML) pipeline. It also rests on a Jupyter Notebook framework, which many of today’s data scientists and machine learning users are familiar with. 
 
 With Sagemaker, a user is able to:
@@ -49,7 +49,7 @@ Thank you to the following resources for help and input on this question.
 * [**Amazon SageMaker Autopilot**](https://aws.amazon.com/sagemaker/autopilot/)
 * [**How AWS Attempts To Bring Transparency To AutoML Through Amazon SageMaker Autopilot**](https://www.forbes.com/sites/janakirammsv/2020/02/27/how-aws-attempts-to-bring-transparency-to-automl-through-amazon-sagemaker-autopilot/#3b1092b32acc)
 
-# What are competitive offerings to Sagemaker?
+# What are competitive offerings to Amazon Sagemaker?
 
 The competitors to Sagemaker all fall within the Machine Learning as a Service (MLaaS) bucket. They all offer, at some level, the ability to develop and deploy machine learning models in one place. Some competitors also offer versions of automatic ML (AutoML). The following chart shows a high level overview of the major competitors to Sagemaker for both AutoML and custom made models.
 
