@@ -28,11 +28,11 @@ With the amount of available data in the world continuing to grow, tools that ar
 
 What made Hadoop extremely useful and effective is that it didn’t rely on larger and more powerful state-of-the-art hardware. Instead, it took the opposite approach. Hadoop allows for distributed processing, meaning and single process is distributed across a set of machines. So, in theory, if you had a process that was bogging down your machine, you could use Hadoop to split it to a second machine, dividing the burden. Or even better, you could split it across thousands of machines! This would allow you to process extremely large amounts of data. Even better, the machines Hadoop is using can be standard, off-the-shelf machines. Machines that are prone to failure, but with Hadoops distributed system, that failure can be detected and overcome, maintaining a high-availability service.
 
-There a few different problems Hadoop is useful for, and they are all Big Data problems. 
+There are few different problems Hadoop is useful for, and they are all Big Data problems. 
 
 * Data Processing: Performing database-like processing on massive amounts of data (think tera- or petabyte level). Anything smaller and you don’t get the savings with Hadoop. There are better options.
 * Data Storage: Storing diverse sets and types of data, structured or unstructured. Hadoop does not require a Schema.
-* Parallel Processing: MapReduce allows these petabytes of data to be split into smaller, manageable chunks, each processed in parallel. MapReduce then reaggregates the dispersed analysis to yield a consolidated output.
+* Parallel Processing: MapReduce allows these petabytes of data to be split into smaller, manageable chunks, each processed in parallel. MapReduce then re-aggregates the dispersed analysis to yield a consolidated output.
 
 ## Resources
 Thank you to the following resources for help and input on this question.
