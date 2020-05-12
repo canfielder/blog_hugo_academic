@@ -1,7 +1,7 @@
 ---
 title: 'Utilizing Spark and SageMaker'
 author: Evan Canfield
-date: '2020-05-21'
+date: '2020-05-12'
 slug: spark-sagemaker-pipeline
 categories:
   - cloud
@@ -13,9 +13,9 @@ tags:
 subtitle: 'Spark and SageMaker in a Machine Learning Pipeline'
 summary: 'Combining Spark and SageMaker in a Machine Learning Pipeline'
 authors: []
-lastmod: '2020-03-29T10:17:48-04:00'
+lastmod: '2020-05-12T12:19:55-04:00'
+featured: true
 draft: false
-featured: yes
 image:
   caption: ''
   focal_point: ''
