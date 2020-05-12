@@ -11,10 +11,10 @@ tags:
   - spark
   - python
 subtitle: 'Spark and SageMaker in a Machine Learning Pipeline'
-summary: 'Combining Spark and SageMaker resources in a Machine Learning Pipeline'
+summary: 'Combining Spark and SageMaker in a Machine Learning Pipeline'
 authors: []
 lastmod: '2020-03-29T10:17:48-04:00'
-#draft: True 
+draft: false
 featured: yes
 image:
   caption: ''
