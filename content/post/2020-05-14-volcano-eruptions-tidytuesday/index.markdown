@@ -10,21 +10,22 @@ tags:
   - ggplot
   - R
 subtitle: ''
-summary: "TidyTuesday submission for Week 20 of 2020"
+summary: TidyTuesday submission for Week 20 of 2020.
 authors: []
 lastmod: '2020-05-14T13:45:23-04:00'
 featured: no
-draft: true
+draft: false
 image:
-  caption: Volcanic Eruption Locations
-  focal_point: 'smart'
+  placement: 1
+  caption: "Volcanic Eruptions Since 1800"
+  focal_point: "Center"
   preview_only: false
 projects: []
 ---
 
 
 
-This weeks Tidy Tuesday looka at [Volcano Eruptions](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-05-12/readme.md). 
+This weeks #TidyTuesday looks at [Volcano Eruptions](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-05-12/readme.md). 
 
 **Goal**: Create an animation visualizing where volcanic eruptions occur.
 
@@ -34,13 +35,6 @@ For the analysis I will use the following libraries.
 
 ```r
 if (!require(pacman)) {install.packages('pacman')} 
-```
-
-```
-## Loading required package: pacman
-```
-
-```r
 p_load(
   animation, data.table, gganimate, ggthemes, lubridate, maps, mapdata, 
   maptools, rgdal, rgeos, rnaturalearth, tidyverse
@@ -55,16 +49,16 @@ eruptions <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/
 ```
 
 # Processing
-There are two data inputs I will need to develop to visulize where volcanic eruptions occur: 
+There are two data inputs I will need to develop to visualize where volcanic eruptions occur: 
 
 1. World Map
-2. Volcanic eruption data, with the date of eruption and location (latitiude / longitude)
+2. Volcanic eruption data, with the date of eruption and location (latitude/longitude)
 
 
 ## World Map
-Most of the worlds volcanic activity occurs around the Pacific ocean. Therefore, the map I want to use will have the Pacific at the center. Unfortunatley, most of the default maps available use the Pacific ocean as the edge of the map. Additionally, most defualt maps use something similar to a [Mercator projection](https://en.wikipedia.org/wiki/Mercator_projection), which over represents the size of countries closer to the poles. Luckily, I found a [blog post](https://seethedatablog.wordpress.com/2016/12/31/r-shift-centralprime-meridian-of-world-map/) which walked through creating a very visually pleasing [Eckert IV projection](https://en.wikipedia.org/wiki/Eckert_IV_projection) based, Pacific-centered map. I used the code for this map to make my map. Big thanks to the writer of the blog, Valentin. 
+Most of the worlds volcanic activity occurs around the Pacific Ocean. Therefore, the map I want to use will have the Pacific at the center. Unfortunately, most of the default maps available use the Pacific Ocean as the edge of the map. Additionally, most available maps use something similar to a [Mercator projection](https://en.wikipedia.org/wiki/Mercator_projection), which over represents the size of countries closer to the poles. Luckily, I found a [blog post](https://seethedatablog.wordpress.com/2016/12/31/r-shift-centralprime-meridian-of-world-map/) which walked through creating a very visually pleasing [Eckert IV projection](https://en.wikipedia.org/wiki/Eckert_IV_projection) based, Pacific-centered map. I used the code for this map to make my map. Big thanks to the writer of the blog, Valentin. 
 
-The first step is to import a world map. For this step I used the **rnaturalearth** package to import a country based world map. This is of a standard style with the Pacifc ocean on the edges.
+The first step is to import a world map. For this step I used the **rnaturalearth** package to import a country based world map. This is of a standard style with the Pacific Ocean on the edges.
 
 ```r
 sp_worldmap <-  ne_countries(returnclass='sp')
@@ -230,9 +224,6 @@ p_static <- p_map +
           subtitle = paste0("From ", cutoff_year," Through Today")) +
   labs(caption = "#TidyTuesday || Created By: Evan Canfield") + 
   theme_erupt()
-
-# Inspect Static Image
-#p_static
 ```
 
 
@@ -264,13 +255,11 @@ gif_world_eruptions <- animate(p_animate,
                                fps = fps,
                                height = height_opt/dim_factor,
                                width = width_opt/dim_factor)
-
-gif_world_eruptions
 ```
 
-![](index_files/figure-html/generate_animation-1.gif)<!-- -->
+![Eruptions Gif](imgs/eruptions.gif)
 
-**Note**: _I used the parameter **transition_manual** as opposed to a time based transition. This is due to an error I was getting related to using **geom_polygons** to create the base map. The package **gganimate** doesn't play well with polygons. In the future I would try to keep my spatial data in Shapefile form and use **coord_sf** and other shapefile centric parameters with ggplot._
+**Note**: _I used the parameter **transition_manual** as opposed to a time-based transition. This is due to an error I was getting related to using **geom_polygons** to create the base map. The package **gganimate** doesn't play well with polygons. In the future I would try to keep my spatial data in Shapefile form and use **coord_sf** and other shapefile centric parameters with ggplot._
 
 
 

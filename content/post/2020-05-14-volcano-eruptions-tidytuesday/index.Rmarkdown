@@ -10,14 +10,15 @@ tags:
   - ggplot
   - R
 subtitle: ''
-summary: "TidyTuesday submission for Week 20 of 2020"
+summary: TidyTuesday submission for Week 20 of 2020.
 authors: []
 lastmod: '2020-05-14T13:45:23-04:00'
 featured: no
 draft: false
 image:
-  caption: Volcanic Eruption Locations
-  focal_point: 'smart'
+  placement: 1
+  caption: "Volcanic Eruptions Since 1800"
+  focal_point: "Center"
   preview_only: false
 projects: []
 ---
@@ -33,7 +34,7 @@ This weeks #TidyTuesday looks at [Volcano Eruptions](https://github.com/rfordata
 The complete code and analysis can be found at the following GitHub repo: [https://github.com/canfielder/tidytuesday](https://github.com/canfielder/tidytuesday)
 
 For the analysis I will use the following libraries.
-```{r import_libraries}
+```{r import_libraries, message=FALSE}
 if (!require(pacman)) {install.packages('pacman')} 
 p_load(
   animation, data.table, gganimate, ggthemes, lubridate, maps, mapdata, 
@@ -190,9 +191,9 @@ The first step to creating an animation was creating a static image that I was h
 # Establish Custom Theme Values
 theme_erupt <- function(){
   theme(
-    plot.title = element_text(size = 20),
-    plot.subtitle = element_text(size = 15),
-    plot.caption = element_text(size = 10),
+    plot.title = element_text(size = 25),
+    plot.subtitle = element_text(size = 20),
+    plot.caption = element_text(size = 15),
     plot.margin =  margin(0.5, 0.5, 0.5, 0.5, "cm")
   )
 }
@@ -213,24 +214,30 @@ p_static <- p_map +
           subtitle = paste0("From ", cutoff_year," Through Today")) +
   labs(caption = "#TidyTuesday || Created By: Evan Canfield") + 
   theme_erupt()
-
-# Inspect Static Image
-#p_static
 ```
 
-```{r save_featured_image, include=FALSE}
+```{r featured_image, include=FALSE}
+p_featured <- p_map + 
+  geom_point(data = df_input %>% filter(year(eruption_date) >= cutoff_year),
+               mapping = aes(x = long_proj, 
+                             y = lat_proj),
+             color = '#FF0000', 
+             alpha = 0.25,
+             size = 2,
+             shape = 16) +
+  theme_erupt()
+
 width_opt = 16
 height_opt = 9
 size_factor = 1.5
 
-ggsave(filename = "imgs/featured.png", plot = p_static, 
+ggsave(filename = "featured.png", plot = p_featured, 
        width = width_opt/size_factor, height = height_opt/size_factor, 
        units = "in")
 ```
 
 With the base image set I can then generate and animation using **gganimate**. 
-
-```{r generate_animation}
+```{r generate_animation, eval=FALSE}
 # Define animation
 p_animate <- p_static +
   transition_manual(eruption_date, cumulative = TRUE) +
@@ -254,13 +261,13 @@ gif_world_eruptions <- animate(p_animate,
                                fps = fps,
                                height = height_opt/dim_factor,
                                width = width_opt/dim_factor)
-
-gif_world_eruptions
 ```
+
+![](imgs/eruptions.gif)
 
 **Note**: _I used the parameter **transition_manual** as opposed to a time-based transition. This is due to an error I was getting related to using **geom_polygons** to create the base map. The package **gganimate** doesn't play well with polygons. In the future I would try to keep my spatial data in Shapefile form and use **coord_sf** and other shapefile centric parameters with ggplot._
 
-```{r save_gif, include=FALSE}
+```{r save_gif, eval=FALSE, include=FALSE}
 anim_save(filename = "imgs/eruptions.gif", animation = gif_world_eruptions )
 ```
 
