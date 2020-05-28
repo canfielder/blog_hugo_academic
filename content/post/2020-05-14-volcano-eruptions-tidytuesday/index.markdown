@@ -201,9 +201,9 @@ The first step to creating an animation was creating a static image that I was h
 # Establish Custom Theme Values
 theme_erupt <- function(){
   theme(
-    plot.title = element_text(size = 20),
-    plot.subtitle = element_text(size = 15),
-    plot.caption = element_text(size = 10),
+    plot.title = element_text(size = 25),
+    plot.subtitle = element_text(size = 20),
+    plot.caption = element_text(size = 15),
     plot.margin =  margin(0.5, 0.5, 0.5, 0.5, "cm")
   )
 }
@@ -229,7 +229,6 @@ p_static <- p_map +
 
 
 With the base image set I can then generate and animation using **gganimate**. 
-
 
 ```r
 # Define animation
@@ -257,7 +256,7 @@ gif_world_eruptions <- animate(p_animate,
                                width = width_opt/dim_factor)
 ```
 
-![Eruptions Gif](imgs/eruptions.gif)
+![](imgs/eruptions.gif)
 
 **Note**: _I used the parameter **transition_manual** as opposed to a time-based transition. This is due to an error I was getting related to using **geom_polygons** to create the base map. The package **gganimate** doesn't play well with polygons. In the future I would try to keep my spatial data in Shapefile form and use **coord_sf** and other shapefile centric parameters with ggplot._
 
