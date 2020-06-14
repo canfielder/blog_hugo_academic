@@ -19,6 +19,14 @@ date_format = "Jan 2006"
 #   Begin/end multi-line descriptions with 3 quotes `"""`.
 
 [[item]]
+  organization = "Amazon Web Services (AWS)"
+  organization_url = "https://aws.amazon.com/"
+  title = "AWS Certified Cloud Practitioner"
+  certificate_url = "https://www.youracclaim.com/badges/a34bdfc6-30ce-44d0-bb2d-8c66796ca785/linked_in_profile"
+  date_start = "2020-06-01"
+  date_end = "2023-06-01"
+
+[[item]]
   organization = "Udemy"
   organization_url = "https://www.udemy.com/"
   title = "AWS Certified Cloud Practitioner 2020-Real World & Pragmatic"
@@ -26,7 +34,7 @@ date_format = "Jan 2006"
   certificate_url = "https://www.udemy.com/certificate/UC-b8b3a35a-3c43-4f58-a994-5cd96bf49105/"
   date_start = "2020-05-21"
   date_end = "2020-05-28"
-  description = "Preparation for AWS Cloud Practitioner CertificationExam"
+  description = "Preparation for AWS Cloud Practitioner Certification Exam"
 
 [[item]]
   organization = "DataCamp"
