@@ -305,7 +305,7 @@ lf <- leaflet(options = leafletOptions(minZoom = 3)) %>%
 htmlwidgets::saveWidget(widget = lf, file = "figure.html", selfcontained = TRUE)
 ```
 
-<iframe src="2020-03-23-data-viz-travel_files/figure-html/widgets/widget_leaflet_plot.html" height = "404" width="100%"></iframe> 
+<iframe src="figure.html" height = "404" width="100%"></iframe> 
 
 Admittedly, it runs a little slow, but is still pretty useful for determining what states and counties I might get on a future trip.
 
