@@ -3,7 +3,7 @@ title: "Oh the Places You'll Go!"
 author: "Evan Canfield"
 date: '2019-04-29'
 categories: data viz
-draft: no
+draft: yes
 featured: yes
 image:
   caption: test

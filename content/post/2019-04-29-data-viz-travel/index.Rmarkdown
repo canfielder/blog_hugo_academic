@@ -250,7 +250,7 @@ col_pal_leaflet <- colorNumeric(palette = "viridis",
 ```
 
 With everything all set, I can now generate the leaflet interactive visual. The settings for the Academic Hugo theme do not allow **htmlwidgets** to display as is. Therefore, I need to perform a small workaround,where I export the **leaflet** **widget** and then re-import it as an html object in an iframe.
-```{r leaflet_plot, out.width="100%"}
+```{r leaflet_plot, echo = T, results = 'hide'}
 lf <- leaflet(options = leafletOptions(minZoom = 3)) %>% 
   addTiles() %>% 
   addPolygons(data = spdf_state,
