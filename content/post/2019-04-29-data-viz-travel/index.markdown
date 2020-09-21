@@ -1,27 +1,25 @@
 ---
-title: "Oh the Places You'll Go!"
-author: "Evan Canfield"
+title: Oh the Places You'll Go!
+author: Evan Canfield
 date: '2019-04-29'
-categories: data viz
+slug: data-viz-travel
+categories:
+  - data viz
+tags:
+  - ggplot
+  - R
+subtitle: ''
+summary: Vizualizations of where I've traveled in the United States.
+authors: []
+lastmod: '2020-09-21T15:17:16-04:00'
+featured: no
 draft: yes
-featured: yes
 image:
   caption: test
   focal_point: smart
   preview_only: yes
-lastmod: '2020-03-23T14:39:26-04:00'
 projects: []
-slug: data-viz-travel
-subtitle: ''
-summary: Visualizing where I've traveled.
-tags:
-- R
-- ggplot
-authors: []
 ---
-
-
-
 Ever since I could remember I have loved maps. As a kid I could get lost in an atlas or inspecting a globe. As an adult that love of maps has remained, I mean, there's even a globe on the desk right next to me as I write this!
 
 So with that as background, it might not sound SO crazy to learn that back in 2018, I made a concerted effort to document where on those maps I had actually stepped foot. I kept it to the United States, since I really haven't traveled internationally that much. I started big picture: States! I figured out every state I had passed through in my life. This was pretty easy. I grew up in Connecticut, and mostly traveled around New England and the Northeast. The possible list was pretty short.
@@ -48,6 +46,7 @@ options(tigris_use_cache = TRUE)
 ## Shapefiles
 In order to visually plot the information, I need shapefiles. In a previous project I generated my own set of shapefiles, modified from US Census Bureau files. Those files can be found at the following [Github repo](https://github.com/canfielder/state_shapefile_al_hi_inset). In the future I may do a quick post on that process separately. These shapefiles are in standard dataframe form.
 
+
 ```r
 # State Shapefiles
 sf_state <- readRDS(file = "data/us_state_map.RDS")
@@ -59,6 +58,7 @@ sf_county <- readRDS(file = "data/us_county_map.RDS")
 ## Cataloged Travel Data
 I have documented each state and county I have traveled through in a simple spreadsheet. I'll import it here.
 
+
 ```r
 df <- read.csv("data/catalog_personal_travel.csv", 
               stringsAsFactors = FALSE)
@@ -66,8 +66,9 @@ df <- read.csv("data/catalog_personal_travel.csv",
 
 When the CSV file for the personal travel data was imported, some columns that should be treated as stings get imported as integers. That means for these columns, any leading zeros are dropped. I will need to add them back, and converted the appropriate columns to characters.
 
+
 ```r
-# Functin For Adding Leading Zeros
+# Function For Adding Leading Zeros
 pad_chr <- function(x, na.rm=FALSE)  str_pad(string = x,
                                              width = max(nchar(x)),  
                                              side = 'left', pad = 0)
@@ -77,11 +78,12 @@ df <- df %>%
   mutate_at(vars(contains('code')), as.character) %>% 
   mutate_at(vars(contains('code')), pad_chr)
 ```
- 
+
 # State's Visited
 Now, to generate a visual of the state's I have visited, I will have to process the personal travel catalog data. That data is recorded at a county level. To use, I will need to create a state level version. I will need to perform a group_by action on the state.I will then sum the number of counties I have visited in each state. If the sum is greater than 1, I have visited that state. 
 
 **Note**: There are actually three columns which uniquely identify the state for the corresponding observation. I will group on **state_code**, which is the State FIPS code. This will make future actions simpler. 
+
 
 ```r
 df_state <- df %>% 
@@ -92,12 +94,15 @@ df_state <- df %>%
 
 Now that I have a data set identifying which states I have and have not been to, I can join that data with the state shapefile and plot it. This new file will be the input into *ggplot**.
 
+
 ```r
 sf_state_visit <- sf_state %>% 
   left_join(df_state, by = c("state_fips" = "state_code"))
 ```
 
+
 Before plotting the map, I'm going to define some global ggplot theme values to make it easier to apply the same conditions to multiple plots.
+
 
 ```r
 # Style Settings
@@ -118,6 +123,8 @@ theme_choropleth <- function(){
 
 With the joined file, I now can plot the data and create a state level choropleth. The blue states are states I have visited.
 
+
+
 ```r
 p_state <- ggplot()
 
@@ -134,7 +141,7 @@ p_state_1 <- p_state + geom_polygon(
 p_state_1
 ```
 
-<img src="/post/2019-04-29-data-viz-travel/index_files/figure-html/state_plot-1.png" width="100%" />
+<img src="/post/2019-04-29-data-viz-travel/index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 
 
 # Counties Visited
@@ -142,13 +149,16 @@ With the state map complete, I'll create a county level map. The process is esse
 
 First, I join the shapefile with the visit data.
 
+
 ```r
 sf_county_visit <- sf_county %>% 
   left_join(df, by = c("state_fips" = "state_code", 
                        "county_fips" = "county_code"))
 ```
 
+
 Then I plot. To the state boundaries clear, I overlay the states lines with the county lines.  I'll create a function to generate the plot because I plan on generating similar plots with the same core code.
+
 
 ```r
 plot_county <- function(df_state, df_county){
@@ -167,7 +177,7 @@ plot_county <- function(df_state, df_county){
     theme_choropleth()
 
 # State Overlay
-  P_state_overlay <-  geom_polygon(
+  p_state_overlay <-  geom_polygon(
       data = df_state,
       mapping = aes(x = long, y = lat, group = group),
       color = col_edge,
@@ -175,19 +185,21 @@ plot_county <- function(df_state, df_county){
       size = 1)
 
 # Combine
-p_county_1 + P_state_overlay
+p_county_1 + p_state_overlay
 }
 
 plot_county(sf_state_visit, sf_county_visit)
 ```
 
-<img src="/post/2019-04-29-data-viz-travel/index_files/figure-html/county_plot-1.png" width="100%" />
+<img src="/post/2019-04-29-data-viz-travel/index_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+
 
 # Regional Plots
 Out of curiosity I want to inspect New England and the Carolinas as two separate plots. These are the areas of the country where I have lived the longest, so I expect to see the most coverage here.
 
 ## New England
 I'll need to filter the county and state data to isolate the six New England states.
+
 
 ```r
 # State FIPS codes
@@ -198,18 +210,17 @@ sf_county_visit_ne <- sf_county_visit %>%
 
 sf_state_visit_ne <- sf_state_visit %>% 
   filter(state_fips %in% new_england_fips)
-```
 
-
-```r
 p_ne <- plot_county(sf_state_visit_ne, sf_county_visit_ne)
 print(p_ne, vp=viewport(angle=-17.5))
 ```
 
-<img src="/post/2019-04-29-data-viz-travel/index_files/figure-html/new_england_county-1.png" width="672" />
+<img src="/post/2019-04-29-data-viz-travel/index_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+
 
 ## Carolinas
 Just like in New England, I filter so only North and South Carolina are in the data. 
+
 
 ```r
 # State FIPs codes
@@ -222,14 +233,16 @@ sf_state_visit_nc <- sf_state_visit %>%
   filter(state_fips %in% car_fips)
 ```
 
+
 Then I plot. I use the **grid** package to rotate the output ggplot figure to better view North Carolina. 
+
 
 ```r
 p_car <- plot_county(sf_state_visit_nc, sf_county_visit_nc)
 print(p_car, vp=viewport(angle=-13.5))
 ```
 
-<img src="/post/2019-04-29-data-viz-travel/index_files/figure-html/carolina_plot-1.png" width="672" />
+<img src="/post/2019-04-29-data-viz-travel/index_files/figure-html/unnamed-chunk-13-1.png" width="672" />
 
 # Interactive
 For now I'm going to try one last thing. I'm going to plot this data in **leaflet**, an interactive **htmlwidget**. Unfortunately, I can't use the shapefile data I was using in previous sections. That data was manipulated to put Alaska and Hawaii in an inset. As as a result, this data won't plot onto an actual map.Therefore, I need to create a new shapefile for both state and county data.
@@ -251,12 +264,14 @@ Just like with the **ggplot** visuals, I need to join the personal travel catalo
 
 Before I make the join, I need to create a variable to join on. The shapefile has a variable called **GEOID**. This is the five digit county/state FIPS code. IT turns out my data set has the county and state FIPS codes, only as separate columns. So I will combine these codes to create a variable to join with **GEOID**.
 
+
 ```r
 df <- df %>% 
   mutate(FIPS = str_c(state_code, county_code))
 ```
 
 Now, both the shapefile and the travel data share a variable I can join on. 
+
 
 ```r
 spdf_county_visited <- geo_join(spatial_data = spdf_county, 
@@ -265,15 +280,19 @@ spdf_county_visited <- geo_join(spatial_data = spdf_county,
                                 by_df = "FIPS")
 ```
 
+
 ## Leaflet Visual
 Just like with the ggplot visuals, I need to define some general visual settings.
+
 
 ```r
 col_pal_leaflet <- colorNumeric(palette = "viridis", 
                     domain = spdf_county_visited$visited)
 ```
 
-With everything all set, I can now generate the leaflet interactive visual. The settings for the Academic Hugo theme do not allow **htmlwidgets** to display as is. Therefore, I need to perform a small workaround,where I export the **leaflet** **widget** and then re-import it as an html object in an iframe.
+
+With everything all set, I can now generate the leaflet interactive visual. 
+
 
 ```r
 lf <- leaflet(options = leafletOptions(minZoom = 3)) %>% 
@@ -285,7 +304,7 @@ lf <- leaflet(options = leafletOptions(minZoom = 3)) %>%
     dashArray = 1.5,
     fillColor = "white",
     fillOpacity = 0
-  ) %>%
+  ) %>%  
   addPolygons(data = spdf_county_visited,
     highlight = highlightOptions(color = "white"),
     fillColor = ~col_pal_leaflet(spdf_county_visited$visited),
@@ -303,11 +322,38 @@ lf <- leaflet(options = leafletOptions(minZoom = 3)) %>%
                lng2 = -60,
                lat1 = 73, 
                lat2 = 15)
-
-htmlwidgets::saveWidget(widget = lf, file = "figure.html", selfcontained = TRUE)
 ```
 
-<iframe src="figure.html" height = "404" width="100%"></iframe> 
+The settings for the Academic Hugo theme do not allow **htmlwidgets** to display as is. Therefore, I need to perform a small workaround. I'll walk through the steps just to make it more clear what's going on. I used the following blog post as the basis for this method: [Using Leaflet and htmlwidgets in a Hugo-generated page](https://waterdata.usgs.gov/blog/leaflet/).
 
-Admittedly, it runs a little slow, but is still pretty useful for determining what states and counties I might get on a future trip.
 
+```r
+# Create Directory to Save Widget
+folder_1 = "widget"
+dir.create(folder_1, recursive = TRUE, showWarnings = FALSE)
+
+# Set Working Directory to Created Directory
+setwd(folder_1)
+
+# Save HTMLWidget to New Folder
+htmlwidgets::saveWidget(widget = lf, 
+                        file = "county_leaflet.html", 
+                        selfcontained = FALSE)
+```
+
+Then we import the saved htmlwidget into the markdown document via an iframe html structure. Note, you place the following code in the markdown portion of the notebook, not a code chunk.
+
+```r
+<iframe 
+  seamless src="widget/county_leaflet.html" 
+  width="100%" 
+  height="500">
+</iframe>
+```
+
+
+<iframe 
+  seamless src="widget/county_leaflet.html" 
+  width="100%" 
+  height="500">
+</iframe>
