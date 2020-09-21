@@ -13,7 +13,7 @@ summary: Vizualizations of where I've traveled in the United States.
 authors: []
 lastmod: '2020-09-21T15:17:16-04:00'
 featured: no
-draft: yes
+draft: no
 image:
   caption: test
   focal_point: smart
