@@ -14,7 +14,6 @@ summary: TidyTuesday submission for Week 20 of 2020.
 authors: []
 lastmod: '2020-05-14T13:45:23-04:00'
 featured: no
-draft: false
 image:
   placement: 1
   caption: "Volcanic Eruptions Since 1800"

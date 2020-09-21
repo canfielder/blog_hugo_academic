@@ -10,11 +10,10 @@ tags:
   - ggplot
   - R
 subtitle: ''
-summary: 'TidyTuesday submission for Week 38 of 2020'
+summary: TidyTuesday submission for Week 38 of 2020.
 authors: []
 lastmod: '2020-09-21T13:45:02-04:00'
 featured: no
-draft: no
 image:
   placement: 1
   caption: "NC Spending on Kids"
